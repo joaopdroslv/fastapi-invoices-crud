@@ -1,0 +1,10 @@
+services:
+  invoices:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/invoices
+      - ./data:/invoices/data
+    environment:
+      - PYTHONUNBUFFERED=1
