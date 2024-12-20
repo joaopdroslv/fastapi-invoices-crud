@@ -26,6 +26,7 @@ class InvoiceRequest(BaseModel):
     paid: bool
     payment_date: Optional[date] = None
     payment_method: Optional[PaymentMethod] = None
+    user_id: Optional[int] = None
 
     @model_validator(mode='before')
     def validate_paid_fields(cls, values):
