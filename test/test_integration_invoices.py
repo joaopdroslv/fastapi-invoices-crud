@@ -59,6 +59,15 @@ def test_list_invoice():
     assert response.json() == {'id': 1, 'value': 3456.1, 'paid': False, 'payment_date': None, 'payment_method': None}
 
 
+def test_list_nonexistent_invoice():
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
+
+    response = client.get('/invoices/9999')
+
+    assert response.status_code == 404
+
+
 def test_create_invoice():
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
@@ -120,7 +129,7 @@ def test_marking_invoice_as_paid():
     assert response.status_code == 200
 
 
-def test_update_invoice_value():
+def test_update_invoice():
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
 
@@ -142,6 +151,18 @@ def test_update_invoice_value():
     assert response.json()['value'] == NEW_VALUE
 
 
+def test_update_nonexistent_invoice():
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
+
+    response = client.put('/invoices/9999', json={
+        'value': 1000.0,
+        'paid': False,
+    })
+
+    assert response.status_code == 404
+
+
 def test_delete_invoice():
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
@@ -156,3 +177,12 @@ def test_delete_invoice():
     response = client.delete(f'/invoices/{created_invoice_id}')
 
     assert response.status_code == 204
+
+
+def test_delete_nonexistent_invoice():
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
+
+    response = client.delete('/invoices/9999')
+
+    assert response.status_code == 404

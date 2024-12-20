@@ -1,4 +1,7 @@
-from invoices.routers import invoices
+from invoices.routers import invoices_router
+
+from shared.exceptions import NotFound
+from shared.exceptions_handlers import not_found_exception_handler
 
 from fastapi import FastAPI
 import uvicorn
@@ -6,7 +9,9 @@ import uvicorn
 
 app = FastAPI()
 
-app.include_router(invoices.router)
+app.add_exception_handler(NotFound, not_found_exception_handler)
+
+app.include_router(invoices_router.router)
 
 
 if __name__ == '__main__':
