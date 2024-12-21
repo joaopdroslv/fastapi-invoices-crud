@@ -1,3 +1,5 @@
+from invoices.schemas.user_schema import UserResponse
+
 from pydantic import BaseModel, Field, model_validator
 from datetime import date
 from enum import Enum
@@ -12,17 +14,18 @@ class PaymentMethod(str, Enum):
 
 class InvoiceResponse(BaseModel):
     id: int
-    value: float = Field(gt=0)
+    value: float
     paid: bool
     payment_date: Optional[date]
     payment_method: Optional[PaymentMethod]
+    user: Optional[UserResponse] = None
 
     class ConfigDict:
         from_attributes = True
 
 
 class InvoiceRequest(BaseModel):
-    value: float
+    value: float = Field(gt=0)
     paid: bool
     payment_date: Optional[date] = None
     payment_method: Optional[PaymentMethod] = None

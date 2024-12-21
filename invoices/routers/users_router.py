@@ -1,8 +1,7 @@
 from shared.dependencies import get_db
-from shared.exceptions import NotFound
-
 from invoices.models.user_model import User
 from invoices.schemas.user_schema import UserRequest, UserResponse
+from invoices.crud.user_crud import find_user_by_id
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
@@ -49,10 +48,3 @@ def delete_user(user_id: int, db: Session = Depends(get_db)) -> None:
     user = find_user_by_id(user_id, db)
     db.delete(user)
     db.commit()
-
-
-def find_user_by_id(user_id: int, db: Session) -> User:
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user:
-        raise NotFound('User')
-    return user
