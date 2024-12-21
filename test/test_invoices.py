@@ -33,9 +33,8 @@ def test_list_invoices():
 
     invoices = [
         {'value': 1000.0, 'paid': False, 'payment_date': None, 'payment_method': None},
-        {'value': 2000.0, 'paid': True, 'payment_date': '2024-01-01', 'payment_method': 'credit_card'},
-        {'value': 2000.0, 'paid': True, 'payment_date': '2024-01-01', 'payment_method': 'debit_card'},
-        {'value': 4000.0, 'paid': True, 'payment_date': '2024-01-01', 'payment_method': 'cash'}
+        {'value': 2000.0, 'paid': False, 'payment_date': None, 'payment_method': None,},
+        {'value': 3000.0, 'paid': False, 'payment_date': None, 'payment_method': None,},
     ]
 
     for invoice in invoices:
@@ -45,9 +44,8 @@ def test_list_invoices():
 
     expected = [
         {'id': 1, 'value': 1000.0, 'paid': False, 'payment_date': None, 'payment_method': None, 'user': None},
-        {'id': 2, 'value': 2000.0, 'paid': True, 'payment_date': '2024-01-01', 'payment_method': 'credit_card', 'user': None},
-        {'id': 3, 'value': 2000.0, 'paid': True, 'payment_date': '2024-01-01', 'payment_method': 'debit_card', 'user': None},
-        {'id': 4, 'value': 4000.0, 'paid': True, 'payment_date': '2024-01-01', 'payment_method': 'cash', 'user': None}
+        {'id': 2, 'value': 2000.0, 'paid': False, 'payment_date': None, 'payment_method': None, 'user': None},
+        {'id': 3, 'value': 3000.0, 'paid': False, 'payment_date': None, 'payment_method': None, 'user': None},
     ]
 
     assert response.status_code == 200
@@ -72,6 +70,49 @@ def test_list_invoice():
 
     assert response.status_code == 200
     assert response.json() == created_invoice
+
+
+def test_list_user_invoices():
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
+
+    # Creates a new user
+    new_user = {'first_name': 'Michael', 'last_name': 'Smith'}
+
+    response = client.post('/users', json=new_user)
+
+    created_user_id = response.json()['id']
+
+    invoices = [
+        {'value': 1000.0, 'paid': False, 'payment_date': None, 'payment_method': None, 'user_id': created_user_id},
+        {'value': 2000.0, 'paid': False, 'payment_date': None, 'payment_method': None, 'user_id': created_user_id},
+        {'value': 3000.0, 'paid': False, 'payment_date': None, 'payment_method': None, 'user_id': created_user_id},
+    ]
+
+    for invoice in invoices:
+        client.post('/invoices', json=invoice)
+
+    response = client.get(f'/users/{created_user_id}/invoices')
+
+    assert response.status_code == 200
+    assert len(response.json()) == 3
+
+
+def test_list_user_invoices_to_an_user_with_no_invoices():
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
+
+    # Creates a new user
+    new_user = {'first_name': 'Michael', 'last_name': 'Smith'}
+
+    response = client.post('/users', json=new_user)
+
+    created_user_id = response.json()['id']
+
+    response = client.get(f'/users/{created_user_id}/invoices')
+
+    assert response.status_code == 200
+    assert response.json() == []
 
 
 def test_list_nonexistent_invoice():
@@ -206,12 +247,12 @@ def test_update_invoice():
 
     updated_invoice = new_invoice.copy()
     updated_invoice['id'] = created_invoice_id
-    updated_invoice['value'] = 2000.0
+    updated_invoice['value'] = 10000.0
 
     response = client.put(f'/invoices/{created_invoice_id}', json=updated_invoice)
 
     assert response.status_code == 200
-    assert response.json()['value'] == 2000.0
+    assert response.json()['value'] == 10000.0
 
 
 def test_update_nonexistent_invoice():

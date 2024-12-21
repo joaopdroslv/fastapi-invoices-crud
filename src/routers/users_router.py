@@ -1,6 +1,8 @@
 from src.database.dependencies import get_db
 from src.models.user_model import User
+from src.models.invoice_model import Invoice
 from src.schemas.user_schema import UserRequest, UserResponse
+from src.schemas.invoice_schema import InvoiceResponse
 from src.crud.user_crud import find_user_by_id
 
 from fastapi import APIRouter, Depends
@@ -19,6 +21,12 @@ def list_users(db: Session = Depends(get_db)) -> List[UserResponse]:
 @router.get('/{user_id}', response_model=UserResponse, status_code=200)
 def list_user(user_id: int , db: Session = Depends(get_db)) -> UserResponse:
     return find_user_by_id(user_id, db)
+
+
+@router.get('/{user_id}/invoices', response_model=List[InvoiceResponse], status_code=200)
+def list_user_invoices(user_id: int, db: Session = Depends(get_db)) -> List[InvoiceResponse]:
+    find_user_by_id(user_id, db)
+    return db.query(Invoice).filter(Invoice.user_id == user_id).all()
 
 
 @router.post('/', response_model=UserResponse, status_code=201)
