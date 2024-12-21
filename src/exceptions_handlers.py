@@ -1,4 +1,4 @@
-from shared.exceptions import NotFound
+from src.exceptions import NotFound
 
 from fastapi import Request
 from fastapi.responses import JSONResponse

@@ -1,5 +1,5 @@
-from shared.exceptions import NotFound
-from invoices.models.user_model import User
+from src.exceptions import NotFound
+from src.models.user_model import User
 
 from sqlalchemy.orm import Session
 

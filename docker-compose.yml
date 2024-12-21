@@ -5,6 +5,6 @@ services:
       - "8000:8000"
     volumes:
       - .:/invoices
-      - ./data:/invoices/data
+      - ./database:/database
     environment:
       - PYTHONUNBUFFERED=1

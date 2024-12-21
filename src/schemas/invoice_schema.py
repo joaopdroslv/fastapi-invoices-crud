@@ -1,4 +1,4 @@
-from invoices.schemas.user_schema import UserResponse
+from src.schemas.user_schema import UserResponse
 
 from pydantic import BaseModel, Field, model_validator
 from datetime import date

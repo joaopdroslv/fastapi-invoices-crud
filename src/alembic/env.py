@@ -16,9 +16,9 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-from invoices.models.invoice_model import Invoice
-from invoices.models.user_model import User
-from shared.database import Base
+from models.invoice_model import Invoice
+from models.user_model import User
+from database import Base
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,

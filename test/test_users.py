@@ -1,6 +1,6 @@
-from invoices.main import app
-from shared.dependencies import get_db
-from shared.database import Base
+from src.main import app
+from src.database.dependencies import get_db
+from src.database.database import Base
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker

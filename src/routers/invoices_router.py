@@ -1,8 +1,8 @@
-from shared.dependencies import get_db
-from invoices.models.invoice_model import Invoice
-from invoices.schemas.invoice_schema import InvoiceRequest, InvoiceResponse
-from invoices.crud.invoice_crud import find_invoice_by_id
-from invoices.crud.user_crud import find_user_by_id
+from src.database.dependencies import get_db
+from src.models.invoice_model import Invoice
+from src.schemas.invoice_schema import InvoiceRequest, InvoiceResponse
+from src.crud.invoice_crud import find_invoice_by_id
+from src.crud.user_crud import find_user_by_id
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session

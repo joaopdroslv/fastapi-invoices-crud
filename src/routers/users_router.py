@@ -1,7 +1,7 @@
-from shared.dependencies import get_db
-from invoices.models.user_model import User
-from invoices.schemas.user_schema import UserRequest, UserResponse
-from invoices.crud.user_crud import find_user_by_id
+from src.database.dependencies import get_db
+from src.models.user_model import User
+from src.schemas.user_schema import UserRequest, UserResponse
+from src.crud.user_crud import find_user_by_id
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
