@@ -2,6 +2,6 @@
 .pytest_cache
 __pycache__
 
-database
+db
 
 /test/test.db

@@ -3,7 +3,7 @@ from src.models.user_model import User
 from src.models.invoice_model import Invoice
 from src.schemas.user_schema import UserRequest, UserResponse
 from src.schemas.invoice_schema import InvoiceResponse
-from src.crud.user_crud import find_user_by_id
+from src.service.user_service import find_user_by_id
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
@@ -31,28 +31,28 @@ def list_user_invoices(user_id: int, db: Session = Depends(get_db)) -> List[Invo
 
 @router.post('/', response_model=UserResponse, status_code=201)
 def create_user(provided_user: UserRequest, db: Session = Depends(get_db)) -> UserResponse:
-    new_user = User(**provided_user.model_dump())
-    db.add(new_user)
+    db_user = User(**provided_user.model_dump())
+    db.add(db_user)
     db.commit()
-    db.refresh(new_user)
-    return new_user
+    db.refresh(db_user)
+    return db_user
 
 
 @router.put('/{user_id}', response_model=UserResponse, status_code=200)
 def update_user(user_id: int, provided_user: UserRequest, db: Session = Depends(get_db)) -> UserResponse:
-    user = find_user_by_id(user_id, db)
+    db_user = find_user_by_id(user_id, db)
 
-    user.first_name = provided_user.first_name
-    user.last_name = provided_user.last_name  
+    db_user.first_name = provided_user.first_name
+    db_user.last_name = provided_user.last_name  
 
-    db.add(user)
+    db.add(db_user)
     db.commit()
-    db.refresh(user)
-    return user
+    db.refresh(db_user)
+    return db_user
 
 
 @router.delete('/{user_id}', status_code=204)
 def delete_user(user_id: int, db: Session = Depends(get_db)) -> None:
-    user = find_user_by_id(user_id, db)
-    db.delete(user)
+    db_user = find_user_by_id(user_id, db)
+    db.delete(db_user)
     db.commit()

@@ -1,8 +1,16 @@
 from src.database.dependencies import get_db
 from src.models.invoice_model import Invoice
-from src.schemas.invoice_schema import InvoiceRequest, InvoiceResponse
-from src.crud.invoice_crud import find_invoice_by_id
-from src.crud.user_crud import find_user_by_id
+from src.schemas.invoice_schema import (
+    BasicInvoiceRequest,  
+    PaymentInfoRequest, 
+    InvoiceResponse
+)
+from src.service.invoice_service import (
+    find_invoice_by_id, 
+    set_invoice_as_paid, 
+    link_invoice_to_an_user
+)
+from src.service.user_service import find_user_by_id
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -23,45 +31,45 @@ def list_invoice(invoice_id: int , db: Session = Depends(get_db)) -> InvoiceResp
 
 
 @router.post('/', response_model=InvoiceResponse, status_code=201)
-def create_invoice(provided_invoice: InvoiceRequest, db: Session = Depends(get_db)) -> InvoiceResponse:
+def create_invoice(provided_invoice: BasicInvoiceRequest, db: Session = Depends(get_db)) -> InvoiceResponse:
     if provided_invoice.user_id:
         # If the provided user id is invalid this will raise NotFound (404) error
         find_user_by_id(provided_invoice.user_id, db)
 
-    new_invoice = Invoice(**provided_invoice.model_dump())
+    db_invoice = Invoice(**provided_invoice.model_dump())
 
-    db.add(new_invoice)
+    db.add(db_invoice)
     db.commit()
-    db.refresh(new_invoice)
-    return new_invoice
+    db.refresh(db_invoice)
+    return db_invoice
+
+
+@router.put('/{invoice_id}/pay', response_model=InvoiceResponse, status_code=200)
+def pay_invoice(invoice_id: int, provided_invoice: PaymentInfoRequest, db: Session = Depends(get_db)) -> InvoiceResponse:
+    db_invoice = set_invoice_as_paid(invoice_id, provided_invoice, db)
+    db.add(db_invoice)
+    db.commit()
+    db.refresh(db_invoice)
+    return db_invoice
 
 
 @router.put('/{invoice_id}', response_model=InvoiceResponse, status_code=200)
-def update_invoice(invoice_id: int, provided_invoice: InvoiceRequest, db: Session = Depends(get_db)) -> InvoiceResponse:
-    invoice = find_invoice_by_id(invoice_id, db)
+def update_invoice(invoice_id: int, provided_invoice: BasicInvoiceRequest, db: Session = Depends(get_db)) -> InvoiceResponse:
+    db_invoice = find_invoice_by_id(invoice_id, db)
 
-    invoice.value = provided_invoice.value
-    invoice.paid = provided_invoice.paid  
-    invoice.payment_date = provided_invoice.payment_date
-    invoice.payment_method = provided_invoice.payment_method
+    if provided_invoice.user_id:
+        link_invoice_to_an_user(db_invoice, provided_invoice, db)
 
-    # Once linked to an user, you can no longer update the invoice user 
-    if invoice.user_id and provided_invoice.user_id:
-        raise HTTPException(status_code=422, detail="Cannot change the user to witch the invoice is linked")
+    db_invoice.value = provided_invoice.value
 
-    if not invoice.user_id and provided_invoice.user_id:
-        # If the provided user id is invalid this will raise NotFound (404) error
-        find_user_by_id(provided_invoice.user_id, db)  
-        invoice.user_id = provided_invoice.user_id
-
-    db.add(invoice)
+    db.add(db_invoice)
     db.commit()
-    db.refresh(invoice)
-    return invoice
+    db.refresh(db_invoice)
+    return db_invoice
 
 
 @router.delete('/{invoice_id}', status_code=204)
 def delete_invoice(invoice_id: int, db: Session = Depends(get_db)) -> None:
-    invoice = find_invoice_by_id(invoice_id, db)
-    db.delete(invoice)
+    db_invoice = find_invoice_by_id(invoice_id, db)
+    db.delete(db_invoice)
     db.commit()
