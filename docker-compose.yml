@@ -1,10 +1,11 @@
 services:
-  invoices:
+  fastapi:
     build: .
+    container_name: fastapi-invoices-app
     ports:
       - "8000:8000"
     volumes:
       - .:/invoices
-      - ./database:/database
+      - ./db:/db
     environment:
       - PYTHONUNBUFFERED=1
