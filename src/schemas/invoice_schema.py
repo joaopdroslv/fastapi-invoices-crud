@@ -1,6 +1,6 @@
 from src.schemas.user_schema import UserResponse
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field
 from datetime import datetime
 from enum import Enum
 from typing import Optional
