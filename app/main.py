@@ -1,17 +1,16 @@
-from src.routers import invoices_router, users_router
-from src.exceptions import (
+from app.routers import invoices_router, users_router
+from app.exceptions import (
     NotFound, 
     InvoiceAlready, 
     InvalidPaymentMethod
 )
-from src.exceptions_handlers import (
+from app.exceptions_handlers import (
     not_found_exception_handler, 
     invoice_already_exception_handler, 
     invalid_payment_method_exception_handler
 )
 
 from fastapi import FastAPI
-import uvicorn
 
 
 app = FastAPI()
@@ -26,7 +25,3 @@ app.add_exception_handler(InvalidPaymentMethod, invalid_payment_method_exception
 
 app.include_router(invoices_router.router)
 app.include_router(users_router.router)
-
-
-if __name__ == '__main__':
-    uvicorn.run(app, host="0.0.0.0", port=8000)

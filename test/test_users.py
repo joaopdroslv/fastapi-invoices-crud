@@ -1,6 +1,6 @@
-from src.main import app
-from src.database.dependencies import get_db
-from src.database.database import Base
+from app.main import app
+from app.database.dependencies import get_db
+from app.database.database import Base
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker

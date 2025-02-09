@@ -1,6 +1,6 @@
-from src.main import app
-from src.database.dependencies import get_db
-from src.database.database import Base
+from app.main import app
+from app.database.dependencies import get_db
+from app.database.database import Base
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -25,6 +25,14 @@ app.dependency_overrides[get_db] = override_get_db
 
 
 client = TestClient(app)
+
+# +-------------------------------------------------------------+
+# | WARNING                                                     |
+# +-------------------------------------------------------------+
+# | Some of the tests in this file are outdated and will fail.  |
+# | It is necessary to update them to reflect recent changes    |
+# | in the API and database schema.                             |
+# +-------------------------------------------------------------+
 
 
 def test_list_invoices():

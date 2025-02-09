@@ -1,4 +1,4 @@
-from src.schemas.user_schema import UserResponse
+from app.schemas.user_schema import UserResponse
 
 from pydantic import BaseModel, Field
 from datetime import datetime

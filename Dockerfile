@@ -2,10 +2,10 @@
 FROM python:3.12.8
 
 # Copiar o conteúdo do projeto para o contêiner
-COPY . /src
+COPY . /app
 
 # Definir diretório de trabalho
-WORKDIR /src
+WORKDIR /app
 
 # Instalar as dependências
 RUN pip install --no-cache-dir -r requirements.txt
@@ -17,4 +17,4 @@ RUN mkdir -p /db && touch /db/database.db
 EXPOSE 8000
 
 # Comando para rodar a aplicação com o Uvicorn
-CMD ["sh", "-c", "alembic upgrade head && uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload"]
+CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"]

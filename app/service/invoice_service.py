@@ -1,15 +1,15 @@
-from src.exceptions import (
+from app.exceptions import (
     NotFound, 
     InvoiceAlready, 
     InvalidPaymentMethod
 )
-from src.models.invoice_model import Invoice
-from src.schemas.invoice_schema import (
+from app.models.invoice_model import Invoice
+from app.schemas.invoice_schema import (
     PaymentMethod, 
     BasicInvoiceRequest, 
     PaymentInfoRequest
 )
-from src.service.user_service import find_user_by_id
+from app.service.user_service import find_user_by_id
 
 from fastapi import HTTPException
 from sqlalchemy.orm import Session

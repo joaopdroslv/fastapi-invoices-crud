@@ -1,5 +1,5 @@
-from src.exceptions import NotFound
-from src.models.user_model import User
+from app.exceptions import NotFound
+from app.models.user_model import User
 
 from sqlalchemy.orm import Session
 

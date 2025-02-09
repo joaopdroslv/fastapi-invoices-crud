@@ -1,4 +1,4 @@
-from src.exceptions import (
+from app.exceptions import (
     NotFound, 
     InvoiceAlready, 
     InvalidPaymentMethod

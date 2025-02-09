@@ -1,9 +1,9 @@
-from src.database.dependencies import get_db
-from src.models.user_model import User
-from src.models.invoice_model import Invoice
-from src.schemas.user_schema import UserRequest, UserResponse
-from src.schemas.invoice_schema import InvoiceResponse
-from src.service.user_service import find_user_by_id
+from app.database.dependencies import get_db
+from app.models.user_model import User
+from app.models.invoice_model import Invoice
+from app.schemas.user_schema import UserRequest, UserResponse
+from app.schemas.invoice_schema import InvoiceResponse
+from app.service.user_service import find_user_by_id
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session

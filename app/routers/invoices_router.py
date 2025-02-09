@@ -1,16 +1,16 @@
-from src.database.dependencies import get_db
-from src.models.invoice_model import Invoice
-from src.schemas.invoice_schema import (
+from app.database.dependencies import get_db
+from app.models.invoice_model import Invoice
+from app.schemas.invoice_schema import (
     BasicInvoiceRequest,  
     PaymentInfoRequest, 
     InvoiceResponse
 )
-from src.service.invoice_service import (
+from app.service.invoice_service import (
     find_invoice_by_id, 
     set_invoice_as_paid, 
     link_invoice_to_an_user
 )
-from src.service.user_service import find_user_by_id
+from app.service.user_service import find_user_by_id
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
