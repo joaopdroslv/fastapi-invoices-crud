@@ -1,11 +1,11 @@
-from app.database.database import Base
-
-from sqlalchemy import Column, Integer, Numeric, Boolean, String, DateTime, ForeignKey
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, Numeric, String
 from sqlalchemy.orm import relationship
+
+from app.database.database import Base
 
 
 class Invoice(Base):
-    __tablename__ = 'invoices'
+    __tablename__ = "invoices"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     value = Column(Numeric, nullable=False)
@@ -14,8 +14,8 @@ class Invoice(Base):
     payment_date = Column(DateTime, nullable=True)
     payment_method = Column(String(128), nullable=True)
 
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=True)
-    user = relationship('User')
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    user = relationship("User")
 
     @property
     def remaining_value(self):

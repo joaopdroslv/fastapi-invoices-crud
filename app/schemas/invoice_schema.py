@@ -1,15 +1,16 @@
-from app.schemas.user_schema import UserResponse
-
-from pydantic import BaseModel, Field
 from datetime import datetime
 from enum import Enum
 from typing import Optional
 
+from pydantic import BaseModel, Field
+
+from app.schemas.user_schema import UserResponse
+
 
 class PaymentMethod(str, Enum):
-    cash = 'Cash'
-    credit_card = 'Credit Card'
-    debit_card = 'Debit Card'
+    cash = "Cash"
+    credit_card = "Credit Card"
+    debit_card = "Debit Card"
 
 
 class InvoiceResponse(BaseModel):
